@@ -194,7 +194,82 @@ void secant(){
     }
 }
 
+//Functions related to Matrix Inversion starts from here
+
+bool gaussJordanInversion(vector<vector<double>>& matrix,vector<vector<double>>& inverse){
+    int n=matrix.size();
+    inverse=vector<vector<double>>(n,vector<double>(n,0));
+    int i,j;
+    for(i=0;i<n;i++){
+        inverse[i][i]=1.0;
+    }
+    for(i=0;i<n;i++){
+        if(matrix[i][i]==0.0){
+            bool swapped=false;
+            for(j=i+1;j<n;j++){
+                if(matrix[j][i]!=0.0){
+                    swap(matrix[i],matrix[j]);
+                    swap(inverse[i],inverse[j]);
+                    swapped=true;
+                    break;
+                }
+            }
+            if(!swapped)
+                return false;
+        }
+        double diag=matrix[i][i];
+        for(j=0;j<n;j++){
+            matrix[i][j]/=diag;
+            inverse[i][j]/=diag;
+        }
+        for(j=0;j<n;j++){
+            if(i!=j){
+                double factor=matrix[j][i];
+                for(int k=0;k<n;k++){
+                    matrix[j][k]-=factor*matrix[i][k];
+                    inverse[j][k]-=factor*inverse[i][k];
+                }
+            }
+        }
+
+    }
+    return true;
+}
+
+void print_matrix(vector<vector<double>>& matrix){
+    int i,j,n=matrix.size();
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            cout<<setw(10)<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+void matrix_inversion(){
+    int n,i,j;
+    cout<<"Enter the size of the matrix: ";
+    cin>>n;
+    vector<vector<double>> matrix(n,vector<double>(n));
+    vector<vector<double>> inverse;
+    cout<<"Enter the elements of the matrix row wise: "<<endl;
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            cin>>matrix[i][j];
+        }
+    }
+    if(gaussJordanInversion(matrix,inverse)){
+        cout<<"The inverse of the matrix is: "<<endl;
+        print_matrix(inverse);
+    }
+    else
+        cout<<"The matrix is singular and cannot be inverted."<<endl;
+}
+
+//Functions of Matrix Inversion ends here
 int main() {
-    
+
+    matrix_inversion();
+
     return 0;
 }
