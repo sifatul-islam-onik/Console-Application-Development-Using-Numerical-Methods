@@ -267,9 +267,211 @@ void matrix_inversion(){
 }
 
 //Functions of Matrix Inversion ends here
+
+//Functions related to Runge-Kutta Method starts from here
+
+double rk_step(double x,double y,double h,function<double(double,double)> f){
+    double k1=h*f(x,y);
+    double k2=h*f(x+0.5*h,y+0.5*k1);
+    double k3=h*f(x+0.5*h,y+0.5*k2);
+    double k4=h*f(x+h,y+k3);
+    return (y+(1.0/6.0)*(k1+2*k2+2*k3+k4));
+}
+
+function<double(double,double)> equation_ax_by(double a,double b){
+    return [a,b] (double x,double y){
+        return (a*x+b*y);
+    };
+}
+
+function<double(double,double)> equation_a_sin_b_cos(double a,double b,double c,double d){
+    return [a,b,c,d](double x,double y){
+        return (a*sin(c*x)+b*cos(d*y));
+    };
+}
+
+function<double(double,double)> equation_a_xy(double a){
+    return [a](double x,double y){
+        return (a*x*y);
+    };
+}
+
+function<double(double,double)> equation_a_cos_b_sin(double a,double b,double c,double d){
+    return [a,b,c,d](double x,double y){
+        return (a*cos(c*x)+b*sin(d*y));
+    };
+}
+
+function<double(double,double)> equation_a_sin_b_y(double a,double b,double c){
+    return [a,b,c](double x,double y){
+        return (a*sin(c*x)+b*y);
+    };
+}
+
+function<double(double,double)> equation_a_cos_b_y(double a,double b,double c){
+    return [a,b,c](double x,double y){
+        return (a*cos(c*x)+b*y);
+    };
+}
+
+function<double(double,double)> equation_ax_b_cos(double a,double b,double d){
+    return [a,b,d](double x,double y){
+        return (a*x+b*cos(d*y));;
+    };
+}
+
+function<double(double,double)> equation_ax_b_sin(double a,double b,double d){
+    return [a,b,d](double x,double y){
+        return (a*x+b*sin(d*y));;
+    };
+}
+
+function<double(double,double)>choose_equation(){
+    int choice;
+    cout<<"Choose a differential equation type: "<<endl;
+    cout<<"1) dy/dx=ax+by"<<endl;
+    cout<<"2) dy/dx=asin(px)+bcos(qy)"<<endl;
+    cout<<"3) dy/dx=axy"<<endl;
+    cout<<"4) dy/dx=acos(px)+bsin(qy)"<<endl;
+    cout<<"5) dy/dx=asin(px)+by"<<endl;
+    cout<<"6) dy/dx=acos(px)+by"<<endl;
+    cout<<"7) dy/dx=ax+bcos(py)"<<endl;
+    cout<<"8) dy/dx=ax+bsin(py)"<<endl;
+    cout<<"Enter your choice: ";
+    cin>>choice;
+    switch(choice){
+        case 1:
+        {
+            double a,b;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            return equation_ax_by(a,b);
+        }
+        case 2:
+        {
+            double a,b,p,q;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            cout<<"Enter q: ";
+            cin>>q;
+            return equation_a_sin_b_cos(a,b,p,q);
+        }
+        case 3:
+        {
+            double a;
+            cout<<"Enter a: ";
+            cin>>a;
+            return equation_a_xy(a);
+        }
+        case 4:
+        {
+            double a,b,p,q;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            cout<<"Enter q: ";
+            cin>>q;
+            return equation_a_cos_b_sin(a,b,p,q);
+        }
+        case 5:
+        {
+            double a,b,p;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            return equation_a_sin_b_y(a,b,p);
+        }
+        case 6:
+        {
+            double a,b,p;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            return equation_a_cos_b_y(a,b,p);
+        }
+        case 7:
+        {
+             double a,b,p;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            return equation_ax_b_cos(a,b,p);
+        }
+        case 8:
+        {
+             double a,b,p;
+            cout<<"Enter a: ";
+            cin>>a;
+            cout<<"Enter b: ";
+            cin>>b;
+            cout<<"Enter p: ";
+            cin>>p;
+            return equation_ax_b_sin(a,b,p);
+        }
+        default:
+        {
+            cout<<"Invalid choice! Using dy/dx=ax+by as default."<<endl;
+            return equation_ax_by(1,1);
+        }
+    }
+}
+
+void runge_kutta(){
+    function<double(double,double)> f=choose_equation();
+    double x0,y0,h,xn;
+    cout<<"Enter initial value of x (x0): ";
+    cin>>x0;
+    cout<<"Enter initial value of y (y0): ";
+    cin>>y0;
+    cout<<"Enter step size (h): ";
+    cin>>h;
+    cout<<"Enter final value of x (xn): ";
+    cin>>xn;
+
+    double x=x0,y=y0;
+    cout<<fixed<<setprecision(5);
+    cout<<"x     "<<"    y"<<endl;
+    cout<<x<<" "<<y<<endl;
+    while(x<xn){
+        double newy=rk_step(x,y,h,f);
+        double newx=x+h;
+        if(newx>xn){
+            double extra=newx-xn;
+            double adjustedh=h-extra;
+            newy=rk_step(x,y,adjustedh,f);
+            newx=xn;
+        }
+        x=newx;
+        y=newy;
+        if(x<xn){
+            cout<<x<<" "<<y<<endl;
+        }
+    }
+}
+
+//Functions for Runge-Kutta Method ends here
+
 int main() {
 
-    matrix_inversion();
-
+    //matrix_inversion();
+    //runge_kutta();
     return 0;
 }
