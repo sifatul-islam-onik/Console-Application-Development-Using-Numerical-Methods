@@ -21,11 +21,11 @@ void secant(): It calculates the root of a polynomial using the secant method. I
 
 ### Matrix Inversion
 
-bool gaussJordanInversion(vector<vector<double>>& matrix, vector<vector<double>>& inverse): This function calculates the inverse of a matrix using the Gauss-Jordan elimination method. It takes two matrices as inputs, `matrix` (the matrix to be inverted) and `inverse` (where the result will be stored). The function first initializes `inverse` as an identity matrix. Then it performs row operations to transform `matrix` into the identity matrix while performing the same operations on `inverse` to produce the inverse matrix. The function returns true if the inversion is successful. Otherwise, it returns false if the matrix is singular.
+bool gaussJordanInversion(vector<vector<double>>& matrix, vector<vector<double>>& inverse): This function calculates the inverse of a matrix using the Gauss-Jordan elimination method. It takes two matrices as inputs, matrix (the matrix to be inverted) and inverse (where the result will be stored). The function first initializes inverse as an identity matrix. Then it performs row operations to transform matrix into the identity matrix while performing the same operations on inverse to produce the inverse matrix. The function returns true if the inversion is successful. Otherwise, it returns false if the matrix is singular.
 
 void print_matrix(vector<vector<double>>& matrix): This function prints a given matrix to the console. It takes a matrix as input and displays each element formatted to align neatly in columns for readability. Each element is displayed with a specific width for consistent spacing.
 
-void matrix_inversion(): This function facilitates user input for matrix inversion. It prompts the user to input the size of the matrix and its elements row by row. It then attempts to compute the inverse of the matrix using `gaussJordanInversion()`. If successful, it displays the inverse. Otherwise, it informs the user that the matrix is singular and cannot be inverted.
+void matrix_inversion(): This function facilitates user input for matrix inversion. It prompts the user to input the size of the matrix and its elements row by row. It then attempts to compute the inverse of the matrix using gaussJordanInversion(). If successful, it displays the inverse. Otherwise, it informs the user that the matrix is singular and cannot be inverted.
 
 ### Differential Equations
 
