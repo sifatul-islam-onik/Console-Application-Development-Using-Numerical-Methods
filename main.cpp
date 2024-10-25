@@ -35,7 +35,7 @@ void biSection(){
         }
         double x = 0, xo = 1e9;
         int cnt = 0;
-        while(fabs(b-a)>1e-4){
+        while(fabs(b-a)>1e-4 && cnt < 1e6){
             ++cnt;
             xo = x;
             x = (a + b) / 2;
@@ -45,6 +45,18 @@ void biSection(){
                 b = x;
             else
                 a = x;
+        }
+        if(cnt == 1e6){
+            cout << "No solution found" << endl;
+            cout << "Do you want to continue? (y/n): " << endl;
+            char c;
+            cin >> c;
+            if(c == 'n')
+                break;
+            else if(c!='y'){
+                cout << "Invalid input. Exiting..." << endl;
+                break;
+            }
         }
         cout << "solution: " << x << endl;
         cout << "iteration: " << cnt << endl;
@@ -78,7 +90,7 @@ void falsePostion(){
         }
         double x = 0, xo = 1e9;
         int cnt = 0;
-        while(fabs(b-a)>1e-4){
+        while(fabs(b-a)>1e-4 && cnt < 1e6){
             ++cnt;
             xo = x;
             x = (a * f(v, b) - b * f(v, a)) / (f(v, b) - f(v, a));
@@ -88,6 +100,18 @@ void falsePostion(){
                 b = x;
             else
                 a = x;
+        }
+        if(cnt == 1e6){
+            cout << "No solution found" << endl;
+            cout << "Do you want to continue? (y/n): " << endl;
+            char c;
+            cin >> c;
+            if(c == 'n')
+                break;
+            else if(c!='y'){
+                cout << "Invalid input. Exiting..." << endl;
+                break;
+            }
         }
         cout << "solution: " << x << endl;
         cout << "iteration: " << cnt << endl;
@@ -124,8 +148,9 @@ void newtonRaphson(){
             break;
         }
         x = xo - f(v, xo) / df(v, xo);
-    } while (abs(x - xo) > 0.000001);
+    } while (abs(x - xo) > 0.000001 && cnt < 1e6);
     cout << x << ' ';
+    cnt = 0;
     do{
         ++cnt;
         xo = x1;
@@ -136,8 +161,9 @@ void newtonRaphson(){
             break;
         }
         x1 = xo - f(v, xo) / df(v, xo);
-    } while (abs(x - xo) > 0.000001);
+    } while (abs(x - xo) > 0.000001 && cnt < 1e6);
     cout << x1 << ' ';
+    cnt = 0;
     if(n>=3){
         double x2 = (x + x1) / 2;
         do{
@@ -150,7 +176,7 @@ void newtonRaphson(){
                 break;
             }
             x2 = xo - f(v, xo) / df(v, xo);
-        } while (abs(x - xo) > 0.000001);
+        } while (abs(x - xo) > 0.000001 && cnt < 0);
         cout << x2 << ' ';
     }
     cout << endl;
@@ -190,6 +216,10 @@ void secant(){
                 cout << "Invalid input. Exiting..." << endl;
                 break;
             }
+        }
+        else{
+            cout << "solution: " << x2 << endl;
+            cout << "iteration: " << cnt << endl;
         }
     }
 }
@@ -469,9 +499,66 @@ void runge_kutta(){
 
 //Functions for Runge-Kutta Method ends here
 
+void nonlinearEquations() {
+    cout << "1. Bi-Section Method" << endl;
+    cout << "2. False Position Method" << endl;
+    cout << "3. Newton-Raphson Method" << endl;
+    cout << "4. Secant Method\n" << endl;
+    cout << "Enter your choice: ";
+    int choice;
+    cin >> choice;
+    switch (choice) {
+        case 1:
+            biSection();
+            break;
+        case 2:
+            falsePostion();
+            break;
+        case 3:
+            newtonRaphson();
+            break;
+        case 4:
+            secant();
+            break;
+        default:
+            cout << "Invalid choice" << endl;
+            break;
+    }
+}
+
+void linearEquations() {
+    
+}
+
 int main() {
 
-    //matrix_inversion();
-    //runge_kutta();
+    cout << "Console Application of Numerical Methods" << endl;
+    cout << "1. Linear Equations" << endl;
+    cout << "2. Non-Linear Equations" << endl;
+    cout << "3. Differential Equations" << endl;
+    cout << "4. Matrix Inversion\n" << endl;
+
+    int choice;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1:
+            linearEquations();
+            break;
+        case 2:
+            nonlinearEquations();
+            break;
+        case 3:
+            runge_kutta();
+            break;
+        case 4:
+            matrix_inversion();
+            break;
+        default:
+            cout << "Invalid choice" << endl;
+            break;
+    }
+
     return 0;
 }
