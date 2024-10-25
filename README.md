@@ -29,7 +29,7 @@ void matrix_inversion(): This function facilitates user input for matrix inversi
 
 ### Differential Equations
 
-double rk_step(double x, double y, double h, function<double(double, double)> f): This function performs a single step of the Runge-Kutta (4th-order) method to approximate the solution of a differential equation. It takes as input the current values of x and y, the step size h and a function `f` representing the differential equation dy/dx=f(x,y). It returns the updated value of y after the step.
+double rk_step(double x, double y, double h, function<double(double, double)> f): This function performs a single step of the Runge-Kutta (4th-order) method to approximate the solution of a differential equation. It takes as input the current values of x and y, the step size h and a function f representing the differential equation dy/dx=f(x,y). It returns the updated value of y after the step.
 
 function<double(double, double)> equation_ax_by(double a, double b): This function returns a lambda function representing a linear differential equation of the form dy/dx=ax+by. It takes constants a and b as input and returns a lambda function that calculates the equation given values of x and y.
 
@@ -49,4 +49,4 @@ function<double(double, double)> equation_ax_b_sin(double a, double b, double d)
 
 function<double(double, double)> choose_equation(): This function provides a menu allowing the user to choose a differential equation type from several predefined options. It then prompts the user for any required constants based on the chosen equation type. The function returns a lambda function representing the selected differential equation, defaulting to dy/dx=ax+by if an invalid choice is entered.
 
-void runge_kutta(): This function applies the Runge-Kutta (4th-order) method to solve a chosen differential equation. It first calls `choose_equation()` to determine the differential equation. Then it prompts the user for initial values of x,y,h(step size) and the final value of x(end of the interval). It outputs the values of x and y at each step until reaching the final x.
+void runge_kutta(): This function applies the Runge-Kutta (4th-order) method to solve a chosen differential equation. It first calls choose_equation() to determine the differential equation. Then it prompts the user for initial values of x,y,h(step size) and the final value of x(end of the interval). It outputs the values of x and y at each step until reaching the final x.
