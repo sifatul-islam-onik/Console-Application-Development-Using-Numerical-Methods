@@ -1,6 +1,140 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const double EPSILON=1e-12;
+
+//Functions for Gauss-Elimination Method starts from here
+
+vector<double> solveUsingGaussianElimination(vector<vector<double>>& a, vector<double>& b)
+{
+    int n=a.size(),i,j,k;
+    for(i=0;i<n;i++){
+        a[i].push_back(b[i]);
+    }
+
+    for(i=0;i<n;i++){
+        int maxRow=i;
+        for(j=i+1;j<n;j++){
+            if(fabs(a[j][i])>fabs(a[maxRow][i]))
+                maxRow=j;
+        }
+        swap(a[i],a[maxRow]);
+        if(fabs(a[i][i])<EPSILON){
+            cout<<"Matrix is singular or nearly singular."<<endl;
+            return {};
+        }
+        for(j=i+1;j<n;j++){
+            double factor=a[j][i]/a[i][i];
+            for(k=i;k<=n;k++){
+                a[j][k]-=factor*a[i][k];
+            }
+        }
+    }
+    vector<double> solution(n);
+    for(i=n-1;i>=0;i--){
+        solution[i]=a[i][n]/a[i][i];
+        for(j=i-1;j>=0;j--){
+            a[j][n]-=a[j][i]*solution[i];
+        }
+    }
+    return solution;
+}
+
+void gaussianElimination(){
+    int n,i,j;
+    cout<<"Enter the number of variables: ";
+    cin>>n;
+    vector<vector<double>> a(n,vector<double>(n));
+    vector<double> b(n);
+    cout<<"Enter the coefficients of the matrix A: "<<endl;
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            cin>>a[i][j];
+        }
+    }
+    cout<<"Enter the constants of the vector B: "<<endl;
+    for(i=0;i<n;i++){
+        cin>>b[i];
+    }
+    vector<double> solution=solveUsingGaussianElimination(a,b);
+    if(!solution.empty()){
+        cout<<"Solution: "<<endl;
+        for(i=0;i<n;i++){
+            cout<<fixed<<setprecision(6);
+            cout<<"x"<<i+1<<"="<<solution[i]<<endl;
+        }
+    }
+}
+
+//Functions for Gauss-Elimination Method ends here
+
+//Functions for Gauss-Jordan Elimination Method starts from here
+
+void solveUsingGaussJordan(vector<vector<double>>& a, vector<double>& b,int& check)
+{
+    int n=a.size(),i,j,k;
+    for(i=0;i<n;i++){
+        a[i].push_back(b[i]);
+    }
+
+    for(i=0;i<n;i++){
+        int maxRow=i;
+        for(j=i+1;j<n;j++){
+            if(fabs(a[j][i])>fabs(a[maxRow][i]))
+                maxRow=j;
+        }
+        swap(a[i],a[maxRow]);
+        if(fabs(a[i][i])<EPSILON){
+            cout<<"Matrix is singular or nearly singular."<<endl;
+            check=0;
+            return;
+        }
+        double pivot=a[i][i];
+        for(j=0;j<=n;j++){
+            a[i][j]/=pivot;
+        }
+        for(j=0;j<n;j++){
+            if(j!=i){
+                double factor=a[j][i];
+                for(k=0;k<=n;k++){
+                    a[j][k]-=factor*a[i][k];
+                }
+            }
+        }
+    }
+    for(i=0;i<n;i++){
+        b[i]=a[i][n];
+    }
+}
+
+void gaussJordan(){
+    int n,i,j,check=1;
+    cout<<"Enter the number of variables: ";
+    cin>>n;
+    vector<vector<double>> a(n,vector<double>(n));
+    vector<double> b(n);
+    cout<<"Enter the coefficients of the matrix A: "<<endl;
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            cin>>a[i][j];
+        }
+    }
+    cout<<"Enter the constants of the vector B: "<<endl;
+    for(i=0;i<n;i++){
+        cin>>b[i];
+    }
+    solveUsingGaussJordan(a,b,check);
+    if(check==1){
+    cout<<"Solution: "<<endl;
+    for(i=0;i<n;i++){
+        cout<<fixed<<setprecision(6);
+        cout<<"x"<<i+1<<"="<<b[i]<<endl;
+    }
+    }
+}
+
+//Functions for Gauss-Jordan Elimination Method ends here
+
 double f(vector<double> &v, double x){
     double res = 0;
     for(int i = v.size(); i > 0; --i)
@@ -527,7 +661,8 @@ void nonlinearEquations() {
 }
 
 void linearEquations() {
-    
+    //gaussianElimination();
+    //gaussJordan();
 }
 
 int main() {
