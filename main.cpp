@@ -2,6 +2,7 @@
 using namespace std;
 
 const double EPSILON=1e-12;
+
 //Functions for Linear Equation
 void Gauss_Seidel_method()
 {
@@ -373,6 +374,8 @@ void gaussJordan(){
 
 //Functions for Gauss-Jordan Elimination Method ends here
 
+//Functions for Non-Linear Equations starts from here
+
 double f(vector<double> &v, double x){
     double res = 0;
     for(int i = v.size(); i > 0; --i)
@@ -595,6 +598,8 @@ void secant(){
         }
     }
 }
+
+//Functions for Non-Linear Equations ends here
 
 //Functions related to Matrix Inversion starts from here
 
@@ -899,8 +904,34 @@ void nonlinearEquations() {
 }
 
 void linearEquations() {
-    //gaussianElimination();
-    //gaussJordan();
+    cout << "1. Jacobi Iterative Method" << endl;
+    cout << "2. Gauss-Seidel Method" << endl;
+    cout << "3. Gauss Elimination Method" << endl;
+    cout << "4. Gauss-Jordan Elimination Method" << endl;
+    cout << "5. LU Factorization Method\n" << endl;
+    cout << "Enter your choice: ";
+    int choice;
+    cin >> choice;
+    switch (choice) {
+        case 1:
+            Jacobi_Iterative_Method();
+            break;
+        case 2:
+            Gauss_Seidel_method();
+            break;
+        case 3:
+            gaussianElimination();
+            break;
+        case 4:
+            gaussJordan();
+            break;
+        case 5:
+            LU_Factorization();
+            break;
+        default:
+            cout << "Invalid choice" << endl;
+            break;
+    }
 }
 
 int main() {
