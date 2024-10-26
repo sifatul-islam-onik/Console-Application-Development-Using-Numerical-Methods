@@ -56,20 +56,20 @@ void Gauss_Seidel_method()
 
             
         }
-    double error=0.0;
-    for(int i=0;i<n;i++)
-    {
-        error+=fabs(x_new[i]-x[i]);
-        
-    }
+        double error=0.0;
+        for(int i=0;i<n;i++)
+        {
+            error = max(error,fabs(x_new[i]-x[i]));
+            x[i]=x_new[i];
+        }
 
-    if(error<tolerence)
-    {
-        cout<<"Converged in "<<itr+1<<" Iterations"<<endl;
-        break;
-    }
+        if(error<=tolerence)
+        {
+            cout<<"Converged in "<<itr+1<<" Iterations"<<endl;
+            break;
+        }
 
-     itr++;
+        itr++;
     }
     
     if(itr==max_itr)
@@ -139,10 +139,10 @@ void Jacobi_Iterative_Method()
     double error=0.0;
     for(int i=0;i<n;i++)
     {
-        error+=fabs(x_new[i]-x[i]);
+        error = max(error,fabs(x_new[i]-x[i]));
         x[i]=x_new[i];
     }
-    if(error<tolerence)
+    if(error<=tolerence)
     {
         cout<<"Converged in "<<itr+1<<" Iterations"<<endl;
         break;
@@ -421,18 +421,6 @@ void biSection(){
             else
                 a = x;
         }
-        if(cnt == 1e6){
-            cout << "No solution found" << endl;
-            cout << "Do you want to continue? (y/n): " << endl;
-            char c;
-            cin >> c;
-            if(c == 'n')
-                break;
-            else if(c!='y'){
-                cout << "Invalid input. Exiting..." << endl;
-                break;
-            }
-        }
         cout << "solution: " << x << endl;
         cout << "iteration: " << cnt << endl;
         cout << "Do you want to continue? (y/n): " << endl;
@@ -475,18 +463,6 @@ void falsePostion(){
                 b = x;
             else
                 a = x;
-        }
-        if(cnt == 1e6){
-            cout << "No solution found" << endl;
-            cout << "Do you want to continue? (y/n): " << endl;
-            char c;
-            cin >> c;
-            if(c == 'n')
-                break;
-            else if(c!='y'){
-                cout << "Invalid input. Exiting..." << endl;
-                break;
-            }
         }
         cout << "solution: " << x << endl;
         cout << "iteration: " << cnt << endl;
@@ -595,6 +571,15 @@ void secant(){
         else{
             cout << "solution: " << x2 << endl;
             cout << "iteration: " << cnt << endl;
+        }
+        cout << "Do you want to continue? (y/n): " << endl;
+        char c;
+        cin >> c;
+        if(c == 'n')
+            break;
+        else if(c!='y'){
+            cout << "Invalid input. Exiting..." << endl;
+            break;
         }
     }
 }
@@ -936,32 +921,38 @@ void linearEquations() {
 
 int main() {
 
-    cout << "Console Application of Numerical Methods" << endl;
-    cout << "1. Linear Equations" << endl;
-    cout << "2. Non-Linear Equations" << endl;
-    cout << "3. Differential Equations" << endl;
-    cout << "4. Matrix Inversion\n" << endl;
+    while(true){
+        cout << "Console Application of Numerical Methods" << endl;
+        cout << "1. Linear Equations" << endl;
+        cout << "2. Non-Linear Equations" << endl;
+        cout << "3. Differential Equations" << endl;
+        cout << "4. Matrix Inversion" << endl;
+        cout << "0. Exit\n" << endl;
 
-    int choice;
-    cout << "Enter your choice: ";
-    cin >> choice;
+        int choice;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    switch (choice) {
-        case 1:
-            linearEquations();
-            break;
-        case 2:
-            nonlinearEquations();
-            break;
-        case 3:
-            runge_kutta();
-            break;
-        case 4:
-            matrix_inversion();
-            break;
-        default:
-            cout << "Invalid choice" << endl;
-            break;
+        switch (choice) {
+            case 1:
+                linearEquations();
+                break;
+            case 2:
+                nonlinearEquations();
+                break;
+            case 3:
+                runge_kutta();
+                break;
+            case 4:
+                matrix_inversion();
+                break;
+            case 0:
+                cout << "Exiting..." << endl;
+                return 0;
+            default:
+                cout << "Invalid choice" << endl;
+                break;
+        }
     }
 
     return 0;
