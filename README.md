@@ -3,6 +3,18 @@ CSE 2208 Course Assignment on Numerical Methods
 
 ## Function description
 
+
+### Linear Equations
+
+solveUsingGaussianElimination(vector<vector<double>>& a, vector<double>& b): This function applies Gaussian elimination with partial pivoting to solve a system of linear equations where a is a reference to a 2D vector representing the coefficient matrix and b is a reference to a vector containing the constants on the right side of each equation. Initially, the function augments matrix a by appending vector b as an extra column to prepare it for elimination. For each column, it identifies the row with the largest pivot element and swaps rows if necessary (partial pivoting) to maximize numerical accuracy. The function then performs forward elimination to create zeros below each pivot element by subtracting scaled versions of the pivot row from the rows below. Once in upper triangular form, it proceeds with back substitution to calculate each variable's value, starting from the last row upward. If any pivot value is near zero, indicating that the matrix is singular, the function outputs a warning and returns an empty vector. Otherwise it returns a vector with the solution values for each variable in the system.
+
+gaussianElimination(): This function serves as a high-level interface for solving a system of linear equations using Gaussian elimination. It does not take any parameters. Instead, it manages input, computation and output within its scope. This function first prompts the user for the number of variables in the system, then gathers user input for the coefficient matrix a and the constant vector b. After collecting these values, it calls solveUsingGaussianElimination with a and b as arguments to perform the calculations. If a solution vector is returned, the function prints each variable's solution, formatted to six decimal places. If the matrix is singular, a message is displayed and no solution is output. Thus, gaussianElimination orchestrates the entire process of solving linear equations from receiving input to delivering results.
+
+solveUsingGaussJordan(vector<vector<double>>& a, vector<double>& b, int& check): This function performs the Gauss-Jordan elimination process on a system of linear equations to solve for the variables, where a is a reference to a 2D vector representing the coefficient matrix, b is a reference to a vector containing constants and check is a reference to an integer that is updated to indicate if the matrix is singular. The function begins by augmenting matrix a with vector b to create an extended matrix for the elimination process. For each column, it finds the row with the largest pivot element, then swaps rows if necessary to ensure numerical stability (partial pivoting). If any pivot element is near zero, indicating a nearly singular matrix, the function outputs an error message, sets check to 0 and exits. If the pivot is non-zero, it normalizes the pivot row by dividing each element by the pivot value. Then it performs row operations to create zeros above and below each pivot, effectively reducing the matrix to reduced row echelon form (RREF). Finally the solution is stored in vector b with each element representing a solution to one variable in the system.
+
+gaussJordan(): This function is the primary interface for solving a system of linear equations using the Gauss-Jordan elimination method. It takes no parameters, handling input, processing and output directly. The function first prompts the user for the number of variables, then reads the coefficient matrix a and constant vector b from user input. It initializes a variable check to 1 which will indicate whether the matrix is singular. The function then calls solveUsingGaussJordan, passing a, b and check as arguments to perform the elimination. If the solution is successful (check remains 1), it outputs each solution with six decimal places, formatted as x1, x2 etc. If the matrix is singular, a message is displayed and no solution is printed. Thus gaussJordan encapsulates the complete Gauss-Jordan elimination process from input to result presentation.
+
+
 ### Non-Linear Equations
 
 double f(vector<double>&v,double x): This function takes a vector which contains coefficients of a polynomial and a value of x as input. It returns the value of the polynomial at x.
@@ -19,6 +31,7 @@ void newtonRaphson(): It calculates the root of a polynomial using the Newton-Ra
 
 void secant(): It calculates the root of a polynomial using the secant method. It first takes the coefficients of the polynomial as input. Then it asks for two initial guesses and finds the root of the polynomial. The process can be terminated by given choice.
 
+
 ### Matrix Inversion
 
 bool gaussJordanInversion(vector<vector<double>>& matrix, vector<vector<double>>& inverse): This function calculates the inverse of a matrix using the Gauss-Jordan elimination method. It takes two matrices as inputs, matrix (the matrix to be inverted) and inverse (where the result will be stored). The function first initializes inverse as an identity matrix. Then it performs row operations to transform matrix into the identity matrix while performing the same operations on inverse to produce the inverse matrix. The function returns true if the inversion is successful. Otherwise, it returns false if the matrix is singular.
@@ -26,6 +39,7 @@ bool gaussJordanInversion(vector<vector<double>>& matrix, vector<vector<double>>
 void print_matrix(vector<vector<double>>& matrix): This function prints a given matrix to the console. It takes a matrix as input and displays each element formatted to align neatly in columns for readability. Each element is displayed with a specific width for consistent spacing.
 
 void matrix_inversion(): This function facilitates user input for matrix inversion. It prompts the user to input the size of the matrix and its elements row by row. It then attempts to compute the inverse of the matrix using gaussJordanInversion(). If successful, it displays the inverse. Otherwise, it informs the user that the matrix is singular and cannot be inverted.
+
 
 ### Differential Equations
 
