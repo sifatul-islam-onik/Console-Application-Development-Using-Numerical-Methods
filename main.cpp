@@ -2,7 +2,245 @@
 using namespace std;
 
 const double EPSILON=1e-12;
+//Functions for Linear Equation
+void Gauss_Seidel_method()
+{
+    int n;
+    cout<<"Enter the number of equation "<<endl;
+    cin>>n;
+    vector<vector<double>> Coeff_matrix(n,vector<double>(n+1));
+    vector<double> x(n);
 
+    cout<<"Enter the coefficient matrix where the last column represent constant value "<<endl;
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n+1;j++)
+        {
+            cin>>Coeff_matrix[i][j];
+        }
+    }
+
+    cout<<"Enter the Initial guess "<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x[i];
+
+    }
+
+    double tolerence;
+    int max_itr;
+    cout<<"Enter the Tolerence level "<<endl;
+    cin>>tolerence;
+
+    cout<<"Enter max iteration number "<<endl;
+    cin>>max_itr;
+
+    int itr=0;
+    vector<double> x_new(n);
+
+    while(itr<max_itr)
+    {
+        for(int i=0;i<n;i++)
+        {   
+            x_new[i]=x[i];
+            x[i]=Coeff_matrix[i][n]/Coeff_matrix[i][i];
+        
+            for(int j=0;j<n;j++)
+            {
+                 if(j!=i){
+                    x[i]-=(Coeff_matrix[i][j]/Coeff_matrix[i][i])*x[j];
+            }
+            }
+
+            
+        }
+    double error=0.0;
+    for(int i=0;i<n;i++)
+    {
+        error+=fabs(x_new[i]-x[i]);
+        
+    }
+
+    if(error<tolerence)
+    {
+        cout<<"Converged in "<<itr+1<<" Iterations"<<endl;
+        break;
+    }
+
+     itr++;
+    }
+    
+    if(itr==max_itr)
+    {
+        cout<<"No Solution in "<<max_itr<<" Iteration"<<endl;
+    }
+    else{
+        
+        cout<<"Solution----> "<<endl;
+        for(int i=0;i<n;i++)
+        {
+            cout<<x[i]<<"  ";
+        }
+        cout<<endl;
+    }
+}
+
+void Jacobi_Iterative_Method()
+{   
+    int n;
+    cout<<"Enter the number of equation "<<endl;
+    cin>>n;
+    vector<vector<double>> Coeff_matrix(n,vector<double>(n+1));
+    vector<double> x(n);
+
+    cout<<"Enter the coefficient matrix where the last column represent constant value "<<endl;
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n+1;j++)
+        {
+            cin>>Coeff_matrix[i][j];
+        }
+    }
+
+    cout<<"Enter the Initial guess "<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x[i];
+
+    }
+
+    double tolerence;
+    int max_itr;
+    cout<<"Enter the Tolerence level "<<endl;
+    cin>>tolerence;
+
+    cout<<"Enter max iteration number "<<endl;
+    cin>>max_itr;
+
+    int itr=0;
+    vector<double> x_new(n);
+
+    while(itr<max_itr)
+    {
+        for(int i=0;i<n;i++)
+        {
+            x_new[i]=Coeff_matrix[i][n]/Coeff_matrix[i][i];
+        
+            for(int j=0;j<n;j++)
+            {
+                 if(j!=i){
+                    x_new[i]-=(Coeff_matrix[i][j]/Coeff_matrix[i][i])*x[j];
+            }
+        }
+    }
+    double error=0.0;
+    for(int i=0;i<n;i++)
+    {
+        error+=fabs(x_new[i]-x[i]);
+        x[i]=x_new[i];
+    }
+    if(error<tolerence)
+    {
+        cout<<"Converged in "<<itr+1<<" Iterations"<<endl;
+        break;
+    }
+
+     itr++;
+    }
+    if(itr==max_itr)
+    {
+        cout<<"No Solution in "<<max_itr<<" Iteration"<<endl;
+    }
+    else{
+        
+        cout<<"Solution----> "<<endl;
+        for(int i=0;i<n;i++)
+        {
+            cout<<x[i]<<"  ";
+        }
+        cout<<endl;
+    }
+
+}
+
+void LU_Factorization()
+{   
+    int n;
+    cout<<"Enter the number the of the equation "<<endl;
+    cin>>n;
+    vector<vector<double>> Co_eff(n,vector<double>(n));
+    cout<<"Enter the Co Efficient of the matrix where the last column represent the constant "<<endl;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n+1;j++)
+        {
+            cin>>Co_eff[i][j];
+
+        }
+    }
+
+    vector<vector<double>> L(n,vector<double>(n,0.0));
+    vector<vector<double>> U(n,vector<double>(n,0.0));
+    vector<double> Y(n,0.0);
+    vector<double> X(n, 0.0);
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j=i;j<n;j++)
+        {
+            U[i][j]=Co_eff[i][j];
+            for(int k=0;k<i;k++)
+            {
+                U[i][j]-=L[i][k]*U[k][j];
+            }
+        }
+
+        for(int j=i;j<n;j++)
+        {
+            if(j==i)
+            {
+                L[i][i]=1;
+            }
+            else {
+                L[j][i]=Co_eff[j][i];
+                for(int k=0;k<i;k++)
+                {
+                    L[j][i]-=L[j][k]*U[k][i];
+                }
+                L[j][i]/=U[i][i];
+            }
+        }
+    }
+
+    for(int i=0;i<n;i++)
+    {
+        Y[i] = Co_eff[i][n];
+        for (int j=0;j<i;j++)
+        {                                               //Forward Substitution
+            Y[i]-=L[i][j]*Y[j];
+        }
+    }
+
+    
+    for(int i=n-1;i>=0;i--)
+    {
+        X[i]=Y[i];
+        for(int j=i+1;j<n;j++)
+        {                                                //Backward Substitution
+            X[i]-=U[i][j]*X[j];
+        }
+        X[i]/=U[i][i];
+    }
+    
+    cout<<"Solution------> "<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cout<<X[i]<<"   ";
+    }
+    cout<<endl;
+}
 //Functions for Gauss-Elimination Method starts from here
 
 vector<double> solveUsingGaussianElimination(vector<vector<double>>& a, vector<double>& b)
